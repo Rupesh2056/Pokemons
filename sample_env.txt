@@ -1,0 +1,4 @@
+POSTGRES_USER=postgres
+POSTGRES_HOST=localhost
+POSTGRES_PASSWORD=postgres
+DATABASE_NAME=my_pokemon_database

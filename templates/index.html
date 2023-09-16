@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <style>
+      .card {
+        padding: 50px;
+        transition: transform .2s; /* Animation */
+     
+        margin: 0 auto;
+      }
+      
+      .card:hover {
+        transform: scale(1.07); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+      </style>
+  </head>
+  <body>
+    <div class="container col-10">
+      <div class="row">
+        {% for fetch_btn in btns %}
+
+          <div class="col-2 mt-5">
+            <button onclick="fetch_data('{{fetch_btn}}')" class="btn btn-sm btn-info" id={{fetch_btn}} > Fetch {{fetch_btn}}</button>
+          </div>
+        {% endfor %}
+
+        </div>
+
+       <form>
+        <div class="row">
+          <div class="col-md-5 mt-5">
+          <input class="form-control form-control-solid" type="text" name="name" placeholder="Enter Name" value={{name}}>
+          </div>
+          <div class="col-md-5 mt-5">
+            <input class="form-control form-control-solid" type="text" name="type" placeholder="Enter Type" value={{type}}>
+            </div>
+            <div class="col-md-2 mt-5">
+              <button class="btn btn-sm btn-primary" type="submit">Search</button>
+            </div>
+
+         </div>
+       </form>
+
+        <div class="row mt-5" id="pokemon_div">
+          {% for pokemon in pokemons %}
+          
+            <div class="card m-3" style="width: 16rem;height:25rem">
+                <img class="card-img-top" src="{{pokemon.image_url}}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title text-center">{{pokemon.name}}</h5>
+                  <hr>
+                  <h6>Types:</h6>
+                  {% for type in pokemon.types %}
+                  <a href="#" class="badge badge-secondary">{{type}}</a>
+                  {% endfor %}
+                </div>
+            </div>
+              
+            {%  endfor %}
+
+        </div>
+        
+
+    </div>
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script>
+
+      function fetch_data(phase){
+        if (phase)
+        {
+          loader = '<div class="d-flex justify-content-center"><div class="spinner-border" role="status">  <span class="sr-only">Loading...</span> </div></div><span class="text-center mt-2">Estimated Time: 1 Minute... </span>'
+          $("#pokemon_div").html(loader);
+
+          $.ajax({
+            url: "http://localhost:8000/v1/fetch_data/?phase=" + phase,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+          
+            success: function(response) {
+              console.log("okay we got the response..............")
+              location.reload();
+            },
+          });
+
+          
+        }
+
+      }
+
+      
+    </script>
+  </body>
+</html> 
